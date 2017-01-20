@@ -61,9 +61,9 @@ object VerticalBoxBlur {
    */
   def parBlur(src: Img, dst: Img, numTasks: Int, radius: Int): Unit = {
     val blurRange = (0 to src.width).by(scalashop.clamp(0, src.width, numTasks)/src.width)
-    blurRange.zip(blurRange.tail).map( _ => (from: Int, to: Int) =>  task {
-      blur(src, dst, from, to, radius)
-    }).foreach( _ => (t: ForkJoinTask[Unit]) => {t.join()})
+    blurRange.zip(blurRange.tail).map((elem:(Int, Int)) =>  task {
+      blur(src, dst, elem._1, elem._2, radius)
+    }).foreach( (t: ForkJoinTask[Unit]) => {t.join()})
   }
 
 }
