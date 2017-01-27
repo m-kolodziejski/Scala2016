@@ -1,2 +1,2 @@
-(0 to 2).by(2/2).zip((0 to 2).by(2/2).tail)
-(0 to 3).by(3)
+(0 to 3).by(1).zip((0 to 3).by(1).tail)
+(0 to 0)

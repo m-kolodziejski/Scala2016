@@ -5,6 +5,9 @@ import java.util.concurrent.ForkJoinTask
 import org.scalameter._
 import common._
 
+import scala.collection.parallel.Task
+import scala.collection.parallel.immutable.ParRange
+
 object HorizontalBoxBlurRunner {
 
   val standardConfig = config(
@@ -61,9 +64,9 @@ object HorizontalBoxBlur {
   def parBlur(src: Img, dst: Img, numTasks: Int, radius: Int): Unit = {
 
     val blurRange = (0 to src.height).by(scalashop.clamp(0, src.height, numTasks)/src.height)
-    blurRange.zip(blurRange.tail).map( _ => (from: Int, to: Int) =>  task {
-      blur(src, dst, from, to, radius)
-    }).foreach( _ => (t: ForkJoinTask[Unit]) => {t.join()})
+    blurRange.zip(blurRange.tail).map( (elem: (Int, Int)) =>  task {
+      blur(src, dst, elem._1, elem._2, radius)
+    }).foreach((t: ForkJoinTask[Unit]) => {t.join()})
   }
 
 }
